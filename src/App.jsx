@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -16,9 +16,51 @@ function App() {
     // ここがランダムになる数字
   };
 
+// APIのデータを保持するためのuseStateを準備します
+const [data, setData] = useState([])
+
+// useEffectの動作を確認しましょう
+useEffect(() => {
+console.log("長野で研究しているおおほり");
+
+// APIから情報を取得し、jsの形に変換する。
+const fetchData = async () => {
+  try{
+    const response = await fetch(
+      "https://jsonplaceholder.typicode.com/todos"
+    );
+    console.log(response, "取得の確認")
+    // jsの形に変換します
+    const data = await response.json();
+    console.log(data, "中身を確認");
+    // jsの形に変換したタンスのデータをuseStateに保持しないといけません
+    setData(data);
+  }catch(error) {
+    console.error("Error!!!",error);
+  }
+
+  };
+  fetchData();
+}, []);
+
+// コンソールログを書いて、どっちが前か後になるかチェックしましょう
+console.log("きんぱつかのみ");
+
+
   return (
     <>
     <h1>初級のおさらい😂</h1>
+
+    {/* ここがポイントです */}
+    {/* mapというおまじないを使って画面を表示させます */}
+    {/* mapは地図ではなく、マッピング */}
+    {data.map((item, index) => (
+      <div key={index}>
+        <p>{item.title}</p>
+        <p>{item.userId}</p>
+        <p>{item.id}</p>
+      </div>
+    ))}
 
     <Form /> 
     
